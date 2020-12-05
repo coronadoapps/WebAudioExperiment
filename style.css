@@ -1,0 +1,16 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #222;
+}
+
+h2, p{
+  color: gold;
+  text-align: center;
+}
+
+canvas {
+  margin-top: 20px;
+  display: block;
+  border: 2px solid gold;
+}
