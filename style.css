@@ -1,17 +1,37 @@
 html, body {
   margin: 0;
   padding: 0;
-  background: #222;
+  background-color: #222;
 }
 
-h2, p{
+h2{
   color: gold;
   text-align: center;
-  font-weight: bold;
+  font-family: 'Nerko One', cursive;
+  font-size: 50px;
 }
 
 canvas {
-  margin-top: 20px;
+  margin-top: 50px;
   display: block;
   border: 2px solid gold;
+}
+
+p{
+  color: gold;
+  position: relative;
+  top: 80vh;
+  text-align: center;
+  font-family: 'Nerko One', cursive;
+  font-size: 20px;
+}
+
+/* unvisited link */
+a:link, a:visited {
+  color: red;
+}
+
+/* mouse over link */
+a:hover {
+  color: purple;
 }

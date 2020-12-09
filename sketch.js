@@ -1,3 +1,5 @@
+let osc, playing, freq, amp, button;
+
 var cnv;
 
 function centerCanvas() {
@@ -6,63 +8,64 @@ function centerCanvas() {
   cnv.position(x, y);
 }
 
+
 function setup() {
   cnv = createCanvas(800, 600);
-  cnv.mousePressed(playSynth);
+  cnv.mousePressed(playOscillator);
   centerCanvas();
-  /*background(222);*/
-  monoSynth = new p5.MonoSynth();
-}
-
-function windowResized() {
-  centerCanvas();
+  osc = new p5.Oscillator('sine');
+  background(0);
+  
+  button = createButton('clear');
+  button.position(windowWidth/2 + 100, windowHeight/2 - 280);
+  button.mousePressed(changeBG);
+  
+  colorPicker = createColorPicker('#ffffff');
+  colorPicker.position(windowWidth/2, windowHeight/2 - 285);
+  
+  sliderStroke = createSlider(1, 20, 10);
+  sliderStroke.position(windowWidth/2 - 170, windowHeight/2 - 280);
+  
 }
 
 function draw() {
-  background(200);
-  var size = 50;
+  //background(60)
+  freq = constrain(map(mouseX, 0, width, 100, 500), 100, 500);
+  amp = 0.5; //constrain(map(mouseY, height, 0, 0, 1), 0, 1);
+  pan = constrain(map(mouseY, height, 0, -1, 1), -1, 1);
   
-  for (let y = 0; y < 60; y++) {
-    for (let x = 0; x < 80; x++) {
-      let xpos = x * size;
-      let ypos = y * size;
-      
-      let index = y * 7 + x; // find the index
-      
-      if( inside(xpos, ypos, size, size) ){
-        // were inside
-        fill(random(255), random(255), random(255));
-        //playSynth();
-      } else {
-        // not inside
-      	fill(10);
-      }
-      
-      stroke(222);
-      rect(xpos, ypos, size, size, 10);
-      
-    }
+  if (playing) {
+    // smooth the transitions by 0.1 seconds
+    osc.freq(freq, 0.1);
+    osc.freq(2*freq, 0.7);
+    osc.amp(amp, 0.1);
+    osc.pan(pan, 0.1);
   }
+  
+  if(mouseIsPressed){
+    stroke(colorPicker.color());
+    strokeWeight(sliderStroke.value());
+    line(mouseX, mouseY, pmouseX, pmouseY);
+  }
+
 }
 
-function inside(x, y, w, h){
- if(mouseX > x && mouseX < x + w && mouseY > y && mouseY < y + h) {
-  return true; 
- } else {
-  return false; 
- }
+function playOscillator() {
+  // starting an oscillator on a user gesture will enable audio
+  // in browsers that have a strict autoplay policy.
+  // See also: userStartAudio();
+  osc.start();
+  playing = true;
 }
 
-function playSynth() {
-  userStartAudio();
+function mouseReleased() {
+  // ramp amplitude to 0 over 0.5 seconds
+  osc.amp(0, 0.5);
+  osc.pan(0, 0.5);
+  playing = false;
+}
 
-  let note = random(['C3','C#3','D3','D#3','E3','F3','F#3','G3','G#3','A3','A#3', 'B3']);
-  // note velocity (volume, from 0 to 1)
-  let velocity = 0.6;/*random();*/
-  // time from now (in seconds)
-  let time = 0;
-  // note duration (in seconds)
-  let dur = 1/6;
-
-  monoSynth.play(note, velocity, time, dur);
+function changeBG() {
+  let val = random(255);
+  background(val);
 }
