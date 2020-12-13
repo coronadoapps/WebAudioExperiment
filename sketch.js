@@ -17,15 +17,23 @@ function setup() {
   background(0);
   
   button = createButton('clear');
-  button.position(windowWidth/2 + 100, windowHeight/2 - 280);
+  button.position(windowWidth/2 + 150, windowHeight/2 - 280);
   button.mousePressed(changeBG);
   
   colorPicker = createColorPicker('#ffffff');
-  colorPicker.position(windowWidth/2, windowHeight/2 - 285);
+  colorPicker.position(windowWidth/2 + 50, windowHeight/2 - 285);
   
   sliderStroke = createSlider(1, 20, 10);
-  sliderStroke.position(windowWidth/2 - 170, windowHeight/2 - 280);
+  sliderStroke.position(windowWidth/2 - 120, windowHeight/2 - 280);
   
+  sel = createSelect();
+  sel.option('Sine');
+  sel.option('Triangle');
+  sel.option('Sawtooth');
+  sel.option('Square');
+  sel.changed(changeType);
+  
+  sel.position(windowWidth/2 - 230, windowHeight/2 - 280);  
 }
 
 function draw() {
@@ -37,7 +45,7 @@ function draw() {
   if (playing) {
     // smooth the transitions by 0.1 seconds
     osc.freq(freq, 0.1);
-    osc.freq(2*freq, 0.7);
+    //osc.freq(2*freq, 0.7);
     osc.amp(amp, 0.1);
     osc.pan(pan, 0.1);
   }
@@ -68,4 +76,17 @@ function mouseReleased() {
 function changeBG() {
   let val = random(255);
   background(val);
+}
+
+function changeType(){
+  let val = sel.value();
+  if(val == 'Sine'){
+    osc.setType('sine');
+  } else if(val == 'Triangle'){
+   	osc.setType('triangle');
+  } else if(val == 'Sawtooth'){
+   	osc.setType('sawtooth');
+  } else if(val == 'Square'){
+   	osc.setType('square');
+  }
 }
