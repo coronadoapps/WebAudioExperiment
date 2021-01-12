@@ -16,30 +16,30 @@ function setup() {
   osc = new p5.Oscillator('sine');
   background(0);
   
-  button = createButton('clear');
-  button.position(windowWidth/2 + 150, windowHeight/2 - 280);
+  button = createButton('limpiar');
+  button.position(windowWidth/2-50, windowHeight/2 - 280);
+  button.size(100,40);
+  button.style('font-family','Nerko One');
+  button.style("background-color", "#eee");
+  button.style("color", "#222");
+  button.style('font-size','20px')
   button.mousePressed(changeBG);
   
   colorPicker = createColorPicker('#ffffff');
-  colorPicker.position(windowWidth/2 + 50, windowHeight/2 - 285);
+  colorPicker.position(windowWidth/2 - 400, windowHeight/2 - 270);
   
-  sliderStroke = createSlider(1, 20, 10);
-  sliderStroke.position(windowWidth/2 - 120, windowHeight/2 - 280);
-  
-  sel = createSelect();
-  sel.option('Sine');
-  sel.option('Triangle');
-  sel.option('Sawtooth');
-  sel.option('Square');
-  sel.changed(changeType);
-  
-  sel.position(windowWidth/2 - 230, windowHeight/2 - 280);  
+  sliderStroke = createSlider(10, 50, 25);
+  sliderStroke.position(windowWidth/2 - 400, windowHeight/2 - 300);
+
+    
 }
 
 function draw() {
+  
+  
   //background(60)
   freq = constrain(map(mouseX, 0, width, 100, 500), 100, 500);
-  amp = 0.5; //constrain(map(mouseY, height, 0, 0, 1), 0, 1);
+  amp = sliderStroke.value()/100;
   pan = constrain(map(mouseY, height, 0, -1, 1), -1, 1);
   
   if (playing) {
@@ -53,8 +53,12 @@ function draw() {
   if(mouseIsPressed){
     stroke(colorPicker.color());
     strokeWeight(sliderStroke.value());
-    line(mouseX, mouseY, pmouseX, pmouseY);
+    line(mouseX, mouseY, pmouseX, pmouseY);  
+    
+    changeType()
   }
+  
+  
 
 }
 
@@ -74,19 +78,24 @@ function mouseReleased() {
 }
 
 function changeBG() {
-  let val = random(255);
+  let val = random([0,255]);
   background(val);
 }
 
 function changeType(){
-  let val = sel.value();
-  if(val == 'Sine'){
+  let r = colorPicker.color().levels[0];
+  let g = colorPicker.color().levels[1]; 
+  let b = colorPicker.color().levels[2];
+  
+  //print(r, g, b)
+  
+  if(r > 200 && g > 200 && b > 200){
     osc.setType('sine');
-  } else if(val == 'Triangle'){
-   	osc.setType('triangle');
-  } else if(val == 'Sawtooth'){
-   	osc.setType('sawtooth');
-  } else if(val == 'Square'){
-   	osc.setType('square');
+  } else if(r > 150 && g < 100 && b < 100){
+    osc.setType('triangle');
+  } else if(r > 150 && g < 100 && b < 100){
+    osc.setType('sawtooth');
+  } else if(r > 150 && g < 100 && b < 100){
+    osc.setType('square');
   }
 }
