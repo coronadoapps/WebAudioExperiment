@@ -17,7 +17,7 @@ function setup() {
   background(0);
   
   button = createButton('limpiar');
-  button.position(windowWidth/2-50, windowHeight/2 - 280);
+  button.position(windowWidth/2-50, windowHeight/2 - 260);
   button.size(100,40);
   button.style('font-family','Nerko One');
   button.style("background-color", "#eee");
@@ -26,10 +26,10 @@ function setup() {
   button.mousePressed(changeBG);
   
   colorPicker = createColorPicker('#ffffff');
-  colorPicker.position(windowWidth/2 - 400, windowHeight/2 - 270);
+  colorPicker.position(windowWidth/2 - 400, windowHeight/2 - 250);
   
   sliderStroke = createSlider(10, 50, 25);
-  sliderStroke.position(windowWidth/2 - 400, windowHeight/2 - 300);
+  sliderStroke.position(windowWidth/2 - 400, windowHeight/2 - 280);
 
     
 }
@@ -38,9 +38,9 @@ function draw() {
   
   
   //background(60)
-  freq = constrain(map(mouseX, 0, width, 100, 500), 100, 500);
+  freq = constrain(map(mouseY, width, 0, 100, 500), 100, 500);
   amp = sliderStroke.value()/100;
-  pan = constrain(map(mouseY, height, 0, -1, 1), -1, 1);
+  pan = constrain(map(mouseX, 0, height, -1, 1), -1, 1);
   
   if (playing) {
     // smooth the transitions by 0.1 seconds
@@ -89,13 +89,13 @@ function changeType(){
   
   //print(r, g, b)
   
-  if(r > 200 && g > 200 && b > 200){
-    osc.setType('sine');
-  } else if(r > 150 && g < 100 && b < 100){
-    osc.setType('triangle');
-  } else if(r > 150 && g < 100 && b < 100){
-    osc.setType('sawtooth');
-  } else if(r > 150 && g < 100 && b < 100){
+  if(r > 150 && g < 100 && b < 100){
     osc.setType('square');
+  } else if(r < 100 && g > 150 && b < 100){
+    osc.setType('triangle');
+  } else if(r < 100 && g < 100 && b > 150){
+    osc.setType('sawtooth');
+  } else{
+    osc.setType('sine');
   }
 }
